@@ -1,6 +1,9 @@
-from .mongo import mongodb
-from utils.logger import log
 from logging import INFO
+
+from utils.logger import log
+
+from .mongo import mongodb
+
 
 def init_collections():
     db = mongodb.db
@@ -18,13 +21,12 @@ def init_collections():
                         },
                         "password": {
                             "bsonType": "string",
-                            "description": "password must be string"
-                        }
-                    }
+                            "description": "password must be string",
+                        },
+                    },
                 }
             }
         },
-        
     }
     print(db, "DB")
     for coll in collections:
@@ -34,9 +36,7 @@ def init_collections():
             for field in collections[coll]["validator"]["$jsonSchema"]["unique"]:
                 db[coll].create_index(field, unique=True)
             collections[coll]["validator"]["$jsonSchema"].pop("unique")
-        
+
         db.command("collMod", coll, validator=collections[coll]["validator"])
-    
+
     log(INFO, "Success validate and connect to collections")
-    
-    

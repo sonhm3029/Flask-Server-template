@@ -1,10 +1,8 @@
 import logging
+from datetime import datetime
 from logging import LogRecord
 from logging.handlers import HTTPHandler
 from typing import Any, Dict, Optional, Tuple
-
-from datetime import datetime
-
 
 LOGGER_NAME = "FLASK_SERVER"
 IVIRSE_LOGGER = logging.getLogger(LOGGER_NAME)
@@ -51,6 +49,7 @@ class CustomHTTPHandler(HTTPHandler):
             "message": record_dict["message"],
         }
 
+
 # Function to configure logging to a file for the current date
 def configure_logging_to_file(identifier: str, log_dir: str):
     current_date = datetime.now().strftime("%Y-%m-%d")
@@ -58,6 +57,7 @@ def configure_logging_to_file(identifier: str, log_dir: str):
     file_handler = logging.FileHandler(log_filename)
     file_handler.setFormatter(DEFAULT_FORMATTER)
     IVIRSE_LOGGER.addHandler(file_handler)
+
 
 def configure(
     identifier: str, log_dir: Optional[str] = None, host: Optional[str] = None
@@ -71,7 +71,6 @@ def configure(
 
     configure_logging_to_file(identifier, log_dir)
 
-
     if host:
         # Create http handler which logs even debug messages
         http_handler = CustomHTTPHandler(
@@ -83,6 +82,7 @@ def configure(
         http_handler.setLevel(logging.DEBUG)
         # Override mapLogRecords as setFormatter has no effect on what is send via http
         IVIRSE_LOGGER.addHandler(http_handler)
+
 
 logger = logging.getLogger(LOGGER_NAME)
 log = logger.log

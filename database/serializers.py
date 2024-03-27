@@ -1,5 +1,6 @@
 from marshmallow import Schema, fields
 
+
 class UserSchema(Schema):
     _id = fields.String()
     username = fields.String()

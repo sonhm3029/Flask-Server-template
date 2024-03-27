@@ -1,17 +1,23 @@
 import os
+from datetime import datetime
+from logging import ERROR, INFO
+
 import pymongo
 from pymongo import MongoClient
-from datetime import datetime
 
 from utils.logger import log
-from logging import INFO, ERROR
 
 db = None
 client = None
 
 
-
 class AutoTimestampedCollection(pymongo.collection.Collection):
+    """Collections wrapper for auto add timestamp when create or update documents
+
+    Args:
+        pymongo (_type_): _description_
+    """
+
     def __init__(self, database, name):
         super().__init__(database, name)
 
@@ -34,13 +40,13 @@ class AutoTimestampedCollection(pymongo.collection.Collection):
         replacement["updated_at"] = datetime.utcnow()
         return super().replace_one(filter, replacement, *args, **kwargs)
 
+
 class MongoDb:
-    
     def __init__(self):
         self.db = None
         self.client = None
         self.collections = {}
-    
+
     def connect(self):
         try:
             DB_URL = os.environ["DB_URL"]
@@ -51,9 +57,10 @@ class MongoDb:
             log(INFO, "Successfully connect to mongodb!")
         except Exception as e:
             log(ERROR, str(e) or "Smt bad occured with database!")
-            
+
     def get_collections(self):
         for coll in self.db.list_collection_names():
             self.collections[coll] = AutoTimestampedCollection(self.db, coll)
-        
+
+
 mongodb = MongoDb()

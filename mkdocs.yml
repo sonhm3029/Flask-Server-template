@@ -1,0 +1,14 @@
+site_name: My Docs
+site_url: https://madewithml.com/
+repo_url: https://github.com/GokuMohandas/Made-With-ML/
+nav:
+  - Home: index.md
+  - database:
+    - mongo: database/mongo.md
+    - models: database/models.md
+    - serializers: database/serializers.md
+theme: readthedocs
+plugins:
+  - mkdocstrings
+watch:
+  - .  # reload docs for any file changes
